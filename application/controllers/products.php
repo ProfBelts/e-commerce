@@ -25,10 +25,6 @@ class Products extends CI_Controller
         $user = $this->session->userdata("user");
         $reviews = $this->review->show_reviews($id);
         
-        $review_id = $this->session->userdata("review_id");
-
-    
-
         if (!$this->session->userdata("reply")) {
             $this->session->set_userdata("reply", FALSE);
         }

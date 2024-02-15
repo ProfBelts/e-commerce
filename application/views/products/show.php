@@ -7,7 +7,14 @@ $formatted_date = date("F j, Y", strtotime($date_string));
     <nav> 
         <ul> 
             <li>V88 Merchandise</li>
-            <li><a href = "#">Dashboard</a></li>
+        <?php 
+            $user = $this->session->userdata("user"); 
+            if($user["is_admin"] == 1) { ?> 
+                <li><a href = "<?= base_url('dashboard/admin') ?>">Dashboard</a></li>
+        <?php } else { ?>
+            <li><a href = "<?= base_url('dashboard') ?>">Dashboard</a></li>
+        <?php }   ?>
+            
             <li><a href = "#">Profile</a></li>
         </ul>
         <a class = "log_out" href = "#">Log-out</a>

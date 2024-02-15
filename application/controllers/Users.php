@@ -48,7 +48,7 @@ class Users extends CI_Controller{
                 if($user_info["is_admin"] == 1) {
                     redirect("dashboard/admin");
                 } else {
-                    echo "User";
+                    redirect("dashboard");
                 }
                 
 
