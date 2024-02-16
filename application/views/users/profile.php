@@ -31,7 +31,7 @@
                 <h2>Edit Profile</h2>
             <form method = "POST" action = "<?= base_url("users/process_edit_profile") ?>"> 
                 <label for = "email">Email:</label>
-                <input type = "text" name = "email" value = "<?= $user["email"] ?> "/>
+                <input type = "text" name = "email" value = "<?=trim($user["email"])?>"/>
                 <label for = "first_name">First Name:</label>
                 <input type = "text" name = "first_name" value = "<?= $user['first_name'] ?>" />
     
