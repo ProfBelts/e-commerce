@@ -59,6 +59,17 @@ class User extends CI_Model
         }
     }
    
+    public function edit_profile($post, $id)
+    {
+        $this->db->set('email_address', $post["email"]);
+        $this->db->set('first_name', $post["first_name"]);
+        $this->db->set('last_name', $post["last_name"]);
+        $this->db->where('ID', $id);
+        $this->db->update('users');
+
+    }
+
+
 
     // This function handles the validation of registration.
     public function validate_registration()
@@ -97,9 +108,11 @@ class User extends CI_Model
     public function validate_edit_profile($post)
     {
 
-      
-
         $this->load->library("form_validation");
+        $user = $this->session->userdata('user');
+        $current_email = $user["email"];
+        
+
         $config = $this->edit_profile_config();
 
         $this->form_validation->set_rules($config);
@@ -107,11 +120,15 @@ class User extends CI_Model
         if($this->form_validation->run() == FALSE)
         {
             return array(validation_errors());
-        } else {
-
-            $email = $post["email"];
         }
-
+        elseif ($post["email"] == $current_email ) 
+        {
+            // Store message in session
+            $message[] = "Successfully added!";
+            return "Same Email";
+        } else {
+            return "New Email";
+        }
     }
     
     
@@ -193,61 +210,40 @@ class User extends CI_Model
     
     public function edit_profile_config()
     {
-        $this->load->model("user");
-        
-        return array(
-            array(
-                "field" => "email",
-                "label" => "Email",
-                "rules" => "required|valid_email|callback_check_email",
-                "errors" => array(
-                    'required' => "You must provide a %s",
-                    "valid_email" => "Email must be valid!",
-                    "check_email" => "Email already exists."
-                )
-            ),
-            array(
-                "field" => "first_name", 
-                "label" => "First Name", 
-                "rules" => "required|regex_match[/^[a-zA-Z\s]+$/]",
-                'errors' => array(
-                    "required" => "You must provide a %s",
-                    "regex_match" => "Name should not contain non-alphabetical characters."
-                )
-            ),
-            array(
-                "field" => "last_name",
-                "label" => "Last Name",
-                "rules" => "required|regex_match[/^[a-zA-Z\s]+$/]",
-                'errors' => array(
-                    "required" => "You must provide a %s",
-                    "regex_match" => "Name should not contain non-alphabetical characters."
-                )
+    return array(
+        array(
+            'field' => 'email',
+            'label' => 'Email',
+            'rules' => "required|valid_email",
+            'errors' => [
+                'required' => 'You must provide a %s.',
+                'valid_email' => 'Email must be valid!' 
+            ]
+        ),
+        array(
+            "field" => "first_name", 
+            "label" => "First Name", 
+            "rules" => "required|regex_match[/^[a-zA-Z\s]+$/]",
+            'errors' => array(
+                "required" => "You must provide a %s",
+                "regex_match" => "Name should not contain non-alphabetical characters."
             )
-        );
+        ),
+        array(
+            "field" => "last_name",
+            "label" => "Last Name",
+            "rules" => "required|regex_match[/^[a-zA-Z\s]+$/]",
+            'errors' => array(
+                "required" => "You must provide a %s",
+                "regex_match" => "Name should not contain non-alphabetical characters."
+            )
+        )
+    );
     }
     
-    public function check_email($email)
+    public function check_edit_profile_email($email, $current_email)
     {
-        // Get the current user's email
-        $user = $this->session->userdata("user");
-        $current_email = $user['email'];
-    
-        // If the provided email is the same as the current email, return true (validation passes)
-        if ($email == $current_email) {
-            return true;
-        }
-    
-        // Check if the email already exists in the database
-        $existing_user = $this->user->get_user_by_email($email);
-    
-        if ($existing_user) {
-            // Email already exists
-            return false;
-        } else {
-            // Email does not exist
-            return true;
-        }
+        return $email === $current_email || !$this->user->get_user_by_email($email);
     }
     
 
