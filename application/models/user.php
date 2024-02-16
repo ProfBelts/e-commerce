@@ -69,8 +69,6 @@ class User extends CI_Model
 
     }
 
-
-
     // This function handles the validation of registration.
     public function validate_registration()
     {

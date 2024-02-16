@@ -110,6 +110,8 @@ class Users extends CI_Controller{
         if($result == "Same Email") 
         {
             $this->user->edit_profile($this->input->post(), $user["user_id"]);
+            
+            
             redirect(base_url("users/edit_profile"));
 
         } elseif ($result == "New Email") {
