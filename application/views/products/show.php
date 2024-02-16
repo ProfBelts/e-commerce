@@ -17,7 +17,7 @@ $formatted_date = date("F j, Y", strtotime($date_string));
             
             <li><a href = "#">Profile</a></li>
         </ul>
-        <a class = "log_out" href = "#">Log-out</a>
+        <a class = "log_out" href = "<?= base_url('dashboard/logout') ?>">Log-out</a>
     </nav>
 
     <main> 

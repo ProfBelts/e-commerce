@@ -92,6 +92,27 @@ class User extends CI_Model
         }
 
     }
+
+
+    public function validate_edit_profile($post)
+    {
+
+      
+
+        $this->load->library("form_validation");
+        $config = $this->edit_profile_config();
+
+        $this->form_validation->set_rules($config);
+
+        if($this->form_validation->run() == FALSE)
+        {
+            return array(validation_errors());
+        } else {
+
+            $email = $post["email"];
+        }
+
+    }
     
     
     public function registration_config()
@@ -146,7 +167,6 @@ class User extends CI_Model
         );
     }
 
-
     public function login_config()
     {
         return array(
@@ -168,6 +188,66 @@ class User extends CI_Model
                 )
             )
         );
+    }
+    
+    
+    public function edit_profile_config()
+    {
+        $this->load->model("user");
+        
+        return array(
+            array(
+                "field" => "email",
+                "label" => "Email",
+                "rules" => "required|valid_email|callback_check_email",
+                "errors" => array(
+                    'required' => "You must provide a %s",
+                    "valid_email" => "Email must be valid!",
+                    "check_email" => "Email already exists."
+                )
+            ),
+            array(
+                "field" => "first_name", 
+                "label" => "First Name", 
+                "rules" => "required|regex_match[/^[a-zA-Z\s]+$/]",
+                'errors' => array(
+                    "required" => "You must provide a %s",
+                    "regex_match" => "Name should not contain non-alphabetical characters."
+                )
+            ),
+            array(
+                "field" => "last_name",
+                "label" => "Last Name",
+                "rules" => "required|regex_match[/^[a-zA-Z\s]+$/]",
+                'errors' => array(
+                    "required" => "You must provide a %s",
+                    "regex_match" => "Name should not contain non-alphabetical characters."
+                )
+            )
+        );
+    }
+    
+    public function check_email($email)
+    {
+        // Get the current user's email
+        $user = $this->session->userdata("user");
+        $current_email = $user['email'];
+    
+        // If the provided email is the same as the current email, return true (validation passes)
+        if ($email == $current_email) {
+            return true;
+        }
+    
+        // Check if the email already exists in the database
+        $existing_user = $this->user->get_user_by_email($email);
+    
+        if ($existing_user) {
+            // Email already exists
+            return false;
+        } else {
+            // Email does not exist
+            return true;
+        }
     }
     
 

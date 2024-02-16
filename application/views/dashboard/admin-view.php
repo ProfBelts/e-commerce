@@ -10,10 +10,10 @@
     <nav> 
         <ul> 
             <li>V88 Merchandise</li>
-            <li><a href = "#">Dashboard</a></li>
-            <li><a href = "#">Profile</a></li>
+            <li><a href = "<?= base_url("dashboard/admin") ?>">Dashboard</a></li>
+            <li><a href = "<?= base_url("users/edit_profile") ?>">Profile</a></li>
         </ul>
-        <a class = "log_out" href = "<?= ('logout') ?>">Log-out</a>
+        <a class = "log_out" href = "<?= base_url('dashboard/logout') ?>">Log-out</a>
     </nav>
 
     <main>

@@ -17,6 +17,20 @@ class Users extends CI_Controller{
     }
 
 
+    public function edit_profile()
+    {   
+        $this->load->model("user");
+        $user = $this->session->userdata("user");
+        $email = $user["email"];
+
+        $user_info = $this->user->get_user_by_email($email);
+    
+        $view_data = array(
+            "user" => $user_info
+        );
+        $this->load->view("users/profile", $view_data);
+    }
+
     // This function is used to handle login
 
     public function process_login()
@@ -40,6 +54,7 @@ class Users extends CI_Controller{
             {
                 $user_data = array(
                     "is_admin" => $user_info["is_admin"],
+                    "email" => $user_info["email_address"],
                     "user_id" => $user_info["id"],
                     "first_name" => $user_info["first_name"],
                     "last_name" => $user_info["last_name"]
@@ -54,23 +69,7 @@ class Users extends CI_Controller{
 
             } else {
                var_dump($credentials);
-            }
-
-            // var_dump($user_info);
-          
-
-
-
-        //     if($credentials == "Success")
-        //     {
-        //         $this->session->set_userdata(array("user_id" => $user_info["id"], "first_name" => $user_info["first_name"], "last_name" => $user_info["last_name"], "is_admin" => $user_info["is_admin"]));
-        //         if($user_info["is_admin"] == 1) {
-        //             redirect("dashboard/admin");
-        //         } else {
-        //             redirect("dashboard");
-        //         }
-        //     }
-           
+            }    
         }
     }
 
@@ -97,6 +96,22 @@ class Users extends CI_Controller{
 
         }
 }
+
+    public function process_edit_profile()
+    {
+        $this->load->model("user");
+
+        $result = $this->user->validate_edit_profile($this->input->post());
+
+        if($result != null) 
+        {
+            var_dump($result);
+        } else {
+            echo "YEHEY";
+        }
+
+    }
+
 
 }
 ?>
