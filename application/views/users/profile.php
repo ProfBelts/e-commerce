@@ -24,8 +24,6 @@
     </nav>
 
     <main>
-  
-
 
             <section class="information">
                 <h2>Edit Profile</h2>
@@ -34,7 +32,6 @@
                 <input type = "text" name = "email" value = "<?=$user["email"]?>"/>
                 <label for = "first_name">First Name:</label>
                 <input type = "text" name = "first_name" value = "<?= $user['first_name'] ?>" />
-    
                 <label for = "last_name">Last Name:</label>
                 <input type = "text" name = "last_name" value = "<?= $user["last_name"] ?>"/>
 

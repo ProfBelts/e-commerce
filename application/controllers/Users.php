@@ -57,8 +57,7 @@ class Users extends CI_Controller{
                     "email" => $user_info["email_address"],
                     "user_id" => $user_info["id"],
                     "first_name" => $user_info["first_name"],
-                    "last_name" => $user_info["last_name"],
-                    "old_password" => $user_info["password"]
+                    "last_name" => $user_info["last_name"]
                 );
                 $this->session->set_userdata("user", $user_data);
                 if($user_info["is_admin"] == 1) {
@@ -98,6 +97,7 @@ class Users extends CI_Controller{
         }
 }
 
+
     public function process_edit_profile()
     {
 
@@ -109,9 +109,6 @@ class Users extends CI_Controller{
 
         if($result == "Same Email") 
         {
-            $this->user->edit_profile($this->input->post(), $user["user_id"]);
-            
-            
             redirect(base_url("users/edit_profile"));
 
         } elseif ($result == "New Email") {

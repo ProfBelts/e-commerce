@@ -44,6 +44,13 @@ class User extends CI_Model
         return $this->db->query($query, array($email))->result_array()[0];
     }
 
+    public function get_user_by_id($id)
+    {
+        $query = "SELECT * from users where ID = ?";
+
+        return $this->db->query($query, array($id))->result_array();
+    }
+
 
     // This function is used to check the credentials of the input of the user.
     
@@ -67,8 +74,13 @@ class User extends CI_Model
         $this->db->where('ID', $id);
         $this->db->update('users');
 
-    }
+        $updated_profile = $this->get_user_by_id($id);
 
+        return $updated_profile["email_address"];
+
+    }
+    
+    
     // This function handles the validation of registration.
     public function validate_registration()
     {
@@ -122,7 +134,11 @@ class User extends CI_Model
         elseif ($post["email"] == $current_email ) 
         {
             // Store message in session
-            $message[] = "Successfully added!";
+            $query_result = $this->edit_profile($post, $user["user_id"]);
+            
+            $updated_profile = $this->get_user_by_email($query_result);
+            
+
             return "Same Email";
         } else {
             return "New Email";
