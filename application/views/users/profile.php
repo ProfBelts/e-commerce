@@ -42,8 +42,9 @@
         
           <section>
             <h2>Edit Password</h2>
-        <form>
+        <form method = "POST" action = "<?= base_url("users/process_edit_password") ?>">
             
+            <input type = "hidden" name = "user_email" value = "<?=$user["email"]?>" />
             <label for = "old_password">Old Password:</label>
             <input type = "password" name = "old_password" />
 
@@ -52,7 +53,7 @@
 
             <label for = "confirm_password">Confirm Password:</label>
             <input type = "password" name = "confirm_password" />
-
+           
 
             <input type = 'submit' value = "Save" />
         </form>

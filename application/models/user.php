@@ -53,7 +53,7 @@ class User extends CI_Model
 
 
     // This function is used to check the credentials of the input of the user.
-    
+    // Password came from the form
     public function match_login($user, $password)
     {
         $encrypted_password = md5($password . $user['salt']);
@@ -80,6 +80,47 @@ class User extends CI_Model
 
     }
     
+
+    public function change_password()
+    {
+        
+
+        
+    }
+
+    public function validate_old_password()
+    {
+        $this->load->library("form_validation");
+
+        $config = array(
+            array(
+                "field" => "old_password",
+                "label" => "Old Password",
+                "rules" => "required",
+                "errors" => array(
+                    "required" => "Please input your old password."
+                )
+            )
+                );
+
+        $this->form_validation->set_rules($config);
+
+        if($this->form_validation->run() == FALSE) 
+        {
+            return array(validation_errors());
+        }
+
+    }
+    
+
+    public function validate_new_password()
+    {
+        $this->load->library("form_validation");
+
+        
+    }
+
+ 
     
     // This function handles the validation of registration.
     public function validate_registration()
@@ -91,7 +132,6 @@ class User extends CI_Model
 
         if($this->form_validation->run() == FALSE)
         {   
-
             return array(validation_errors());
 
         } 
@@ -158,7 +198,6 @@ class User extends CI_Model
             return "New Email";
         }
     }
-    
     
     public function registration_config()
     {
@@ -268,12 +307,7 @@ class User extends CI_Model
         )
     );
     }
-    
-    public function check_edit_profile_email($email, $current_email)
-    {
-        return $email === $current_email || !$this->user->get_user_by_email($email);
-    }
-    
+
 
 }
 

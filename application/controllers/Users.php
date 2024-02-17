@@ -120,5 +120,53 @@ class Users extends CI_Controller{
     }
 
 
+    public function process_edit_password()
+    {
+        
+        $this->load->model("user");
+
+        $email = $this->input->post("user_email");
+        $user_info = $this->user->get_user_by_email($email);
+       
+        $result = $this->user->validate_old_password();
+
+        if($result !== null) 
+        {
+            var_dump($result);
+        } else 
+        {
+            $credentials = $this->user->match_login($user_info, $this->input->post("old_password"));
+
+            if($credentials !== "Success")
+            {
+                echo "password not matched";
+            } else 
+            {
+                echo "Matched";
+            }
+        }
+
+
+      
+
+        // $result = $this->user->validate_password_change($this->input->post());
+
+        // if($result !== null)
+        // {
+        //     var_dump($result);
+        // } 
+        // else {
+        //    $user = $this->session->userdata("user");
+
+
+        // }
+        
+    
+
+    }
+
+
+
+
 }
 ?>
