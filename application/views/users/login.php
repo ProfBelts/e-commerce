@@ -5,7 +5,15 @@
     </nav>
 
     <main>
-        <h2>Log-In</h2>
+    <?php if(isset($errors) && is_array($errors)) { ?>
+        <div class = "error-message"> 
+        <?php foreach($errors as $error) { ?>
+            <p><?= $error ?></p>
+        <?php } ?>
+    <?php } ?>
+    </div>
+        
+    <h2>Log-In</h2>
 
         <form method = "POST" action = <?= ("users/process_login") ?>> 
             <label for = "email">Email:</label>

@@ -62,7 +62,8 @@ class User extends CI_Model
         if ($user["password"] == $encrypted_password) {
             return "Success"; // Passwords match
         } else {
-            return "Invalid Credentials"; // Passwords don't match
+            $errors[] = "Invalid Credentials";
+            return $errors; // Passwords don't match
         }
     }
    
@@ -228,7 +229,7 @@ class User extends CI_Model
                 "label" => "Email", 
                 "rules" => "required|valid_email|is_unique[users.email_address]",
                 "errors" => array(
-                    'required' => "You must provide a %s",
+                    'required' => "You must provide an %s",
                     "valid_email" => "Email must be valid!",
                     "is_unique" => "Email is already taken."
                 )

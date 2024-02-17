@@ -13,7 +13,9 @@ class Reviews extends CI_Controller
 
         if($result != null) 
         {
-            var_dump($result);
+            $this->session->set_flashdata("errors", $result);
+
+            redirect("products/show/". $id);
         } else {
             $this->review->insert_review($this->input->post());
             redirect("products/show/". $id);
@@ -26,6 +28,7 @@ class Reviews extends CI_Controller
     $comment_id = $this->input->post("comment_id");
 
     // Set reply session data to TRUE
+    // When the button is clicked, show the textarea
     $this->session->set_userdata("reply_comment_id", $comment_id);
     $this->session->set_userdata("reply", TRUE);
     
@@ -54,7 +57,8 @@ class Reviews extends CI_Controller
 
             if($result != null) 
             {
-                var_dump($result);
+                $this->session->set_flashdata("errors", $result);
+                redirect("products/show/" . $this->input->post("product_id"));
             } else {
                 
                 $this->session->set_userdata("review_id", $this->input->post("comment_id"));

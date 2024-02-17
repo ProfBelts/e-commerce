@@ -5,6 +5,15 @@
     </nav>
 
     <main>
+    <?php if(isset($errors) && is_array($errors)) { ?>
+        <div class = "error-message"> 
+        <?php foreach($errors as $error) { ?>
+            <p><?= $error ?></p>
+        <?php } ?>
+    <?php } ?>
+    </div>
+
+
     <h2>Register</h2>
 
     <form method="POST" action="<?= base_url("users/process_registration") ?>">

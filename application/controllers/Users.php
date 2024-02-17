@@ -5,15 +5,24 @@ class Users extends CI_Controller{
     // This function is triggered to display the sign-in page. 
     public function index()
     {
+        $view_data = array(
+            "errors" => $this->session->flashdata("errors")
+        );
+
         $this->load->view("templates/header");
-        $this->load->view("users/login");
+        $this->load->view("users/login", $view_data);
     }
 
     // 
     public function register()
     {
+        $view_data = array(
+            "errors" => $this->session->flashdata("errors")
+        );
+
+
         $this->load->view("templates/header");
-        $this->load->view("users/register");
+        $this->load->view("users/register", $view_data);
     }
 
 
@@ -40,8 +49,10 @@ class Users extends CI_Controller{
         $result = $this->user->validate_login();
 
         if($result !== "Success")
-        {
-            var_dump($result);
+        {   
+            $this->session->set_flashdata("errors", $result);
+            redirect("/");
+            // var_dump($result);
         } else 
         {
             $email = $this->input->post("email");
@@ -68,7 +79,8 @@ class Users extends CI_Controller{
                 
 
             } else {
-               var_dump($credentials);
+               $this->session->set_flashdata("errors", $credentials);
+               redirect("/");
             }    
         }
     }
@@ -85,7 +97,8 @@ class Users extends CI_Controller{
 
         if($result != null) 
         {
-            var_dump($result);
+            $this->session->set_flashdata("errors", $result);
+            redirect(base_url("users/register"));
         } 
         else 
         {

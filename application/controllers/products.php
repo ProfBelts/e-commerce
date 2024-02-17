@@ -33,7 +33,8 @@ class Products extends CI_Controller
             "product" => $product,
             "user_id" => $user["user_id"],
             "reviews" => $reviews,
-            "reply" => $this->session->userdata("reply")
+            "reply" => $this->session->userdata("reply"),
+            "errors" => $this->session->flashdata("errors")
         );
 
         $this->load->view("templates/show");

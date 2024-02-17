@@ -20,7 +20,16 @@ $formatted_date = date("F j, Y", strtotime($date_string));
         <a class = "log_out" href = "<?= base_url('dashboard/logout') ?>">Log-out</a>
     </nav>
 
-    <main> 
+    <main>
+    
+    <?php if(isset($errors) && is_array($errors)) { ?>
+        <div class = "error-message"> 
+        <?php foreach($errors as $error) { ?>
+            <p><?= $error ?></p>
+        <?php } ?>
+    <?php } ?>
+    </div>
+
         <h1><?= $product["name"] ?> (&#8369;<?= $product["price"]; ?>)</h1>
         <div class = "item_description">
             <ul>
