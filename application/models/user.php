@@ -81,12 +81,21 @@ class User extends CI_Model
     }
     
 
-    public function change_password()
+    public function change_password($post)
     {
-        
+    $password = $post["new_password"];
+    $salt = bin2hex(openssl_random_pseudo_bytes(22));
+    $combined_password = $password . $salt;
+    $encrypted_password = md5($combined_password);
 
-        
+    $this->db->set('password', $encrypted_password);
+    $this->db->set("salt", $salt);
+    $this->db->where('email_address', $post["user_email"]);
+    $success = $this->db->update('users');
+
+    return $success;
     }
+
 
     public function validate_old_password()
     {
@@ -113,10 +122,21 @@ class User extends CI_Model
     }
     
 
-    public function validate_new_password()
+    public function validate_new_password($post)
     {
+
+        $old_password = $post["old_password"];
+
         $this->load->library("form_validation");
 
+        $config = $this->new_password_config($old_password);
+
+        $this->form_validation->set_rules($config);
+
+        if($this->form_validation->run() == FALSE)
+        {
+            return array(validation_errors());
+        } 
         
     }
 
@@ -132,6 +152,7 @@ class User extends CI_Model
 
         if($this->form_validation->run() == FALSE)
         {   
+            $this->session->set_userdata("errors", array(validation_errors()));
             return array(validation_errors());
 
         } 
@@ -307,6 +328,46 @@ class User extends CI_Model
         )
     );
     }
+
+    public function new_password_config()
+{
+    return array(
+        array(
+            "field" => "new_password",
+            "label" => "New Password",
+            "rules" => "required|min_length[8]",
+            'errors' => array(
+                "required" => "You must provide a %s",
+                "min_length" => "Password must be at least 8 characters long."
+                
+            )
+        ),
+        array(
+            "field" => "confirm_password",
+            "label" => "Confirm Password",
+            "rules" => "required|matches[new_password]",
+            "errors" => array(
+                "required" => "You must provide a %s",
+                "matches" => "Password does not match."
+            )
+        )
+    );
+}
+
+public function check_new_password($post)
+{
+    $user = $this->session->userdata("user");  
+    $user_info = $this->get_user_by_email($user["email"]);
+
+   $result =  $this->match_login($user_info, $post["new_password"]);
+
+    if($result == "Success")
+    {
+        return "Same password";
+    } 
+
+}
+
 
 
 }

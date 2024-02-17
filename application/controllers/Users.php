@@ -124,7 +124,7 @@ class Users extends CI_Controller{
     {
         
         $this->load->model("user");
-
+        // Get the user info via email 
         $email = $this->input->post("user_email");
         $user_info = $this->user->get_user_by_email($email);
        
@@ -134,7 +134,8 @@ class Users extends CI_Controller{
         {
             var_dump($result);
         } else 
-        {
+        {   
+            // If the credentials matched proceed to the validation of new password.
             $credentials = $this->user->match_login($user_info, $this->input->post("old_password"));
 
             if($credentials !== "Success")
@@ -142,7 +143,26 @@ class Users extends CI_Controller{
                 echo "password not matched";
             } else 
             {
-                echo "Matched";
+                // If new password does not pass validation throw error. 
+                $new_password = $this->user->validate_new_password($this->input->post());
+
+                if($new_password !== null)
+                {
+                    var_dump($new_password);
+
+                // If the password pass validation, check if the password is different from the old password.
+                } else 
+                {
+                    $credentials = $this->user->check_new_password($this->input->post());
+
+                    if($credentials == "Same password")
+                    {
+                        echo "enter new password";
+                    } else {
+                        $this->user->change_password($this->input->post());
+                        redirect(base_url("users/edit_profile"));
+                    }
+                }
             }
         }
 
