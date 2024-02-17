@@ -112,8 +112,7 @@ class Users extends CI_Controller{
             redirect(base_url("users/edit_profile"));
 
         } elseif ($result == "New Email") {
-
-            echo "New Email";
+            redirect(base_url("users/edit_profile"));
         } else {
            var_dump($result);
         }

@@ -138,9 +138,23 @@ class User extends CI_Model
             
             $updated_profile = $this->get_user_by_email($query_result);
             
+            $user["first_name"] = $post["first_name"];
+
+            $user["last_name"] = $post["last_name"];
+
+            $this->session->set_userdata("user", $user);
 
             return "Same Email";
-        } else {
+        } elseif ($post["email"] !== $current_email) {
+            $this->edit_profile($post, $user["user_id"]);
+
+
+            $user["email"] = $post["email"];
+            $user["first_name"] = $post["first_name"];
+            $user["last_name"] = $post["last_name"];
+
+            $this->session->set_userdata("user", $user);
+
             return "New Email";
         }
     }
